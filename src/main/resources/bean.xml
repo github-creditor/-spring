@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd">
-
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     <!--告知spring在创建容器时要扫描的包，配置所需要的标签不是在beans的约束中，而是一个名称为context名称空间和约束中-->
-    <context:component-scan base-package="com.wenjie.ioc"></context:component-scan>
 
+    <context:component-scan base-package="com.wenjie.ioc"></context:component-scan>
 
     <!--使用xml的配置再配置一遍-->
 
@@ -20,7 +20,41 @@
     </bean>
 
 
+
     <bean id="date" class="java.util.Date"></bean>
+
+            aop的使用
+
+    <aop:config>
+
+        <aop:pointcut id="pointcutId" expression="execution(public void com.mysql.jdbc.Driver(..))"></aop:pointcut>
+
+        <aop:aspect id="自身的id" ref="加强方法书写的类名">
+            <aop:before method="加强类的方法" pointcut-ref="pointcutId"></aop:before>
+        </aop:aspect>
+
+    </aop:config>
+
+
+
+    <bean name="a" class="com.wenjie.aop.demo01.demo01_a"></bean>
+    <bean name="b" class="com.wenjie.aop.demo01.demo01_b"></bean>
+
+    <aop:config>
+
+       <aop:aspect id="i" ref="b">
+           <aop:before method="takeb" pointcut="execution(public void com.wenjie.aop.demo01.demo01_a.takea(..))"></aop:before>
+
+
+           <aop:around method="around" pointcut="execution(public void com.wenjie.aop.demo01.demo01_a.takea(..))"></aop:around>
+
+
+       </aop:aspect>
+
+    </aop:config>
+
+
+
 
 
 </beans>
